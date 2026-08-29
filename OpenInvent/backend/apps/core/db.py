@@ -39,6 +39,9 @@ def ensure_indexes() -> None:
     db.notebooks.create_index([("status", ASCENDING)], name="idx_status")
 
     db.users.create_index([("email", ASCENDING)], unique=True, name="uniq_email")
+    # sparse: só usuários logados têm auth_token; permite índice único mesmo
+    # com muitos documentos sem o campo.
+    db.users.create_index([("auth_token", ASCENDING)], unique=True, sparse=True, name="uniq_auth_token")
 
     # histórico é consultado por notebook e ordenado por data.
     db.movements.create_index([("notebook_id", ASCENDING)], name="idx_notebook_id")

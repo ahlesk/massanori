@@ -2,12 +2,19 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import exception_handler as drf_exception_handler
 
-from apps.core.exceptions import ConflictError, DomainError, InvalidStateError, NotFoundError
+from apps.core.exceptions import (
+    AuthenticationError,
+    ConflictError,
+    DomainError,
+    InvalidStateError,
+    NotFoundError,
+)
 
 _STATUS_BY_EXCEPTION = (
     (NotFoundError, status.HTTP_404_NOT_FOUND),
     (ConflictError, status.HTTP_409_CONFLICT),
     (InvalidStateError, status.HTTP_422_UNPROCESSABLE_ENTITY),
+    (AuthenticationError, status.HTTP_401_UNAUTHORIZED),
     (DomainError, status.HTTP_400_BAD_REQUEST),
 )
 

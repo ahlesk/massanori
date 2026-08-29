@@ -107,6 +107,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "apps.core.api.custom_exception_handler",
     "DEFAULT_PAGINATION_CLASS": None,
+    # Token opaco validado contra a collection `users` (ver apps/core/authentication.py).
+    # Todo endpoint exige login por padrão; só login e cadastro de usuário
+    # (AllowAny explícito nas views) ficam abertos.
+    "DEFAULT_AUTHENTICATION_CLASSES": ["apps.core.authentication.MongoTokenAuthentication"],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
 
 # Fase 3/4 conectam um front-end vanilla servido separadamente; liberado em

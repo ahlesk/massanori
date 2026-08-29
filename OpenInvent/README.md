@@ -9,6 +9,15 @@ máquina, histórico imutável de retiradas e devoluções.
   pymongo, arquitetura em camadas (View → Serializer → Service →
   Repository → MongoDB), CRUD básico de `notebooks` e `users` (soft
   delete incluso).
+- **Autenticação (adiantada da Fase 4):** todo usuário criado via
+  `POST /api/users/` já nasce com senha e consegue logar imediatamente
+  em `POST /api/auth/login/` — sem passo de ativação. Login por token
+  opaco (`Authorization: Token <valor>`), validado direto contra a
+  collection `users` (ver `apps/core/authentication.py`). Todos os
+  endpoints exigem esse token por padrão; só o cadastro e o login ficam
+  abertos. Não há papéis/permissões diferenciadas ainda — qualquer
+  usuário autenticado tem acesso completo (cadastrar notebook, estoque,
+  checkout/devolução).
 - **Fase 2 (a seguir):** checkout, devolução, histórico e testes.
 - **Fase 3:** front-end vanilla JS.
 - **Fase 4:** dashboard, tela de detalhes, autenticação/permissões.
@@ -49,9 +58,16 @@ cp .env.example .env
 
 API disponível em `http://localhost:8000/api/`.
 
-### Endpoints (Fase 1)
+### Endpoints (Fase 1 + autenticação)
 
-- `GET/POST /api/users/`
+Autenticação (abertos, sem token):
+- `POST /api/users/` — cadastro (name, email, department, password, active?)
+- `POST /api/auth/login/` — body `{email, password}` → `{token, user}`
+
+Autenticados (`Authorization: Token <valor>`):
+- `GET /api/users/`
+- `POST /api/auth/logout/` — invalida o token atual
+- `GET /api/auth/me/` — usuário do token atual
 - `GET /api/notebooks/?status=&asset=` (busca por status e por trecho do asset)
 - `POST /api/notebooks/`
 - `GET/PUT/DELETE /api/notebooks/{asset}/` (DELETE é soft delete → `INATIVO`)

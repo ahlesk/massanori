@@ -22,6 +22,12 @@ class UserRepository:
     def find_by_id(self, user_id: ObjectId) -> dict | None:
         return self.collection.find_one({"_id": user_id})
 
+    def find_by_email(self, email: str) -> dict | None:
+        return self.collection.find_one({"email": email})
+
+    def find_by_token(self, token: str) -> dict | None:
+        return self.collection.find_one({"auth_token": token})
+
     def exists_by_email(self, email: str) -> bool:
         return self.collection.count_documents({"email": email}, limit=1) > 0
 
@@ -30,3 +36,9 @@ class UserRepository:
         if active is not None:
             query["active"] = active
         return list(self.collection.find(query).sort("name", 1))
+
+    def set_token(self, user_id: ObjectId, token: str) -> None:
+        self.collection.update_one({"_id": user_id}, {"$set": {"auth_token": token}})
+
+    def clear_token(self, user_id: ObjectId) -> None:
+        self.collection.update_one({"_id": user_id}, {"$unset": {"auth_token": ""}})

@@ -26,3 +26,9 @@ class InvalidStateError(DomainError):
     """Ex.: tentar retirar um notebook que não está EM_ESTOQUE."""
 
     default_message = "Operação não permitida para o estado atual do recurso."
+
+
+class AuthenticationError(DomainError):
+    """Credenciais inválidas no login (email/senha)."""
+
+    default_message = "E-mail ou senha inválidos."

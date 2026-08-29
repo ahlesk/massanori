@@ -16,3 +16,9 @@ class UserCreateSerializer(serializers.Serializer):
     email = serializers.EmailField()
     department = serializers.CharField(max_length=100)
     active = serializers.BooleanField(required=False, default=True)
+    password = serializers.CharField(write_only=True, min_length=6)
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
