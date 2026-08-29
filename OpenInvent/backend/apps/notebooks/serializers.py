@@ -35,3 +35,15 @@ class NotebookUpdateSerializer(serializers.Serializer):
     model = serializers.CharField(max_length=100, required=False)
     serial_number = serializers.CharField(max_length=100, required=False)
     status = serializers.ChoiceField(choices=STATUS_CHOICES, required=False)
+
+
+class CheckoutSerializer(serializers.Serializer):
+    user_id = serializers.CharField()
+    observation = serializers.CharField(required=False, allow_blank=True, default="")
+
+
+class ReturnSerializer(serializers.Serializer):
+    # "etc." no enunciado: aceitamos qualquer string, mas só AVARIA muda a
+    # regra de negócio (ver NotebookService.return_notebook).
+    condition = serializers.CharField(required=False, allow_null=True, allow_blank=True, default=None)
+    observation = serializers.CharField(required=False, allow_blank=True, default="")

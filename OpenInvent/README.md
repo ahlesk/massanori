@@ -18,7 +18,8 @@ máquina, histórico imutável de retiradas e devoluções.
   abertos. Não há papéis/permissões diferenciadas ainda — qualquer
   usuário autenticado tem acesso completo (cadastrar notebook, estoque,
   checkout/devolução).
-- **Fase 2 (a seguir):** checkout, devolução, histórico e testes.
+- **Fase 2 (concluída):** checkout, devolução, histórico e testes
+  automatizados (26 testes, `manage.py test`, contra o MongoDB real).
 - **Fase 3:** front-end vanilla JS.
 - **Fase 4:** dashboard, tela de detalhes, autenticação/permissões.
 
@@ -71,6 +72,19 @@ Autenticados (`Authorization: Token <valor>`):
 - `GET /api/notebooks/?status=&asset=` (busca por status e por trecho do asset)
 - `POST /api/notebooks/`
 - `GET/PUT/DELETE /api/notebooks/{asset}/` (DELETE é soft delete → `INATIVO`)
+- `POST /api/notebooks/{asset}/checkout/` — body `{user_id, observation?}`
+- `POST /api/notebooks/{asset}/return/` — body `{condition?, observation?}` (`condition="AVARIA"` → `MANUTENCAO`; qualquer outro valor/ausente → `EM_ESTOQUE`)
+- `GET /api/notebooks/{asset}/history/` — timeline completa (mais recente primeiro)
 - `GET /api/movements/?asset=`
 
-`checkout`, `return` e `history` chegam na Fase 2.
+### Rodando os testes
+
+```bash
+cd backend
+docker compose -f ../docker-compose.yml up -d   # Mongo precisa estar de pé
+./venv/bin/python manage.py test apps
+```
+
+Os testes usam um banco Mongo separado (`notebooks_inventory_test`,
+configurado em `apps/core/testing.py` via `override_settings`) e limpam
+as collections a cada teste — não tocam nos dados de desenvolvimento.

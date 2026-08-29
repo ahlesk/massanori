@@ -8,11 +8,18 @@ from apps.core.db import get_db
 
 class UserRepository:
     def __init__(self, db=None):
-        self._db = db or get_db()
+        # get_db() só é chamado dentro de `collection`, na hora do acesso —
+        # nunca aqui. Views guardam o service/repository como atributo de
+        # classe (singleton criado na importação do módulo); se resolvêssemos
+        # o db já no __init__, essa instância ficaria presa ao banco vigente
+        # naquele instante, ignorando qualquer troca posterior de
+        # settings.MONGO_DB_NAME (é exatamente o que os testes fazem via
+        # override_settings em apps.core.testing.MongoAPITestCase).
+        self._db = db
 
     @property
     def collection(self):
-        return self._db.users
+        return (self._db or get_db()).users
 
     def insert(self, doc: dict) -> dict:
         result = self.collection.insert_one(doc)

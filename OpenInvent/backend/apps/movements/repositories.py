@@ -10,11 +10,15 @@ from apps.core.db import get_db
 
 class MovementRepository:
     def __init__(self, db=None):
-        self._db = db or get_db()
+        # Ver comentário equivalente em apps.users.repositories.UserRepository:
+        # get_db() só é resolvido em `collection`, nunca aqui, para não
+        # prender este repository ao banco vigente no momento em que a view
+        # (que o guarda como atributo de classe) foi importada.
+        self._db = db
 
     @property
     def collection(self):
-        return self._db.movements
+        return (self._db or get_db()).movements
 
     def insert(self, doc: dict) -> dict:
         result = self.collection.insert_one(doc)
