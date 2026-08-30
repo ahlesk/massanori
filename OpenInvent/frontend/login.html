@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar — Inventário de Notebooks</title>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <h1>Inventário de Notebooks</h1>
+    <p class="subtitle">Entre com seu e-mail e senha para continuar.</p>
+
+    <form id="login-form" class="form" novalidate>
+      <label for="login-email">E-mail</label>
+      <input type="email" id="login-email" required autocomplete="username" />
+
+      <label for="login-password">Senha</label>
+      <input type="password" id="login-password" required autocomplete="current-password" />
+
+      <p id="login-error" class="form-error" role="alert"></p>
+
+      <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+    </form>
+  </main>
+
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>

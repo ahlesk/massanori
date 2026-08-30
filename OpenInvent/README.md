@@ -20,8 +20,13 @@ máquina, histórico imutável de retiradas e devoluções.
   checkout/devolução).
 - **Fase 2 (concluída):** checkout, devolução, histórico e testes
   automatizados (26 testes, `manage.py test`, contra o MongoDB real).
-- **Fase 3:** front-end vanilla JS.
-- **Fase 4:** dashboard, tela de detalhes, autenticação/permissões.
+- **Fase 3 (concluída):** front-end vanilla JS (HTML/CSS modular + ES
+  modules) — login, listagem com filtros, criação de notebook,
+  retirada/devolução por modal. Validado ponta a ponta em Chromium real
+  via Playwright (login → criar → retirar → ver → devolver → filtrar →
+  logout).
+- **Fase 4:** dashboard (métricas), tela de detalhes do notebook com
+  histórico completo, refinamentos de permissões.
 
 ## Arquitetura do back-end
 
@@ -88,3 +93,35 @@ docker compose -f ../docker-compose.yml up -d   # Mongo precisa estar de pé
 Os testes usam um banco Mongo separado (`notebooks_inventory_test`,
 configurado em `apps/core/testing.py` via `override_settings`) e limpam
 as collections a cada teste — não tocam nos dados de desenvolvimento.
+
+## Front-end (Fase 3)
+
+```
+frontend/
+  login.html          tela de login
+  index.html          listagem de notebooks + modais (novo/retirar/devolver/ver)
+  css/                reset.css, layout.css, components.css
+  js/
+    api.js            único módulo que fala HTTP com o backend (fetch + token)
+    ui.js             helpers de modal e toast, compartilhados entre telas
+    login.js          lógica da tela de login
+    notebooks.js       lógica da listagem: carregar, filtrar, abrir modais, agir
+```
+
+`js/api.js` é o único arquivo que chama `fetch()` — todas as outras
+telas passam por ele, incluindo a injeção do header
+`Authorization: Token <valor>` (guardado em `localStorage`). Não há
+build step: são módulos ES nativos (`<script type="module">`), por
+isso o front precisa ser servido por HTTP (não aberto como `file://`).
+
+Rodando localmente (com o backend já de pé em `:8000`):
+
+```bash
+cd frontend
+python3 -m http.server 5500
+# abrir http://localhost:5500/login.html
+```
+
+A tela de detalhes com histórico completo e o dashboard de métricas
+ficam para a Fase 4 — hoje o "Ver" mostra só a ficha básica do
+notebook, sem a timeline de movimentações.
