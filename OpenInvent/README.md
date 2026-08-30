@@ -25,8 +25,16 @@ máquina, histórico imutável de retiradas e devoluções.
   retirada/devolução por modal. Validado ponta a ponta em Chromium real
   via Playwright (login → criar → retirar → ver → devolver → filtrar →
   logout).
-- **Fase 4:** dashboard (métricas), tela de detalhes do notebook com
-  histórico completo, refinamentos de permissões.
+- **Fase 4 (concluída):** dashboard com métricas (`GET
+  /api/notebooks/summary/`) e feed das últimas movimentações (`GET
+  /api/movements/?limit=`), tela de detalhes do notebook com ficha
+  técnica + histórico completo, e um refinamento de autenticação
+  (qualquer 401 numa chamada autenticada já redireciona pro login,
+  em vez de cada tela tratar isso na mão). Validado ponta a ponta em
+  Chromium via Playwright. Papéis/permissões continuam no modelo
+  flat decidido na Fase 2 (qualquer usuário autenticado tem acesso
+  completo) — RBAC de verdade (admin vs operador comum) ficou de fora
+  por decisão explícita, não por esquecimento.
 
 ## Arquitetura do back-end
 
@@ -80,7 +88,8 @@ Autenticados (`Authorization: Token <valor>`):
 - `POST /api/notebooks/{asset}/checkout/` — body `{user_id, observation?}`
 - `POST /api/notebooks/{asset}/return/` — body `{condition?, observation?}` (`condition="AVARIA"` → `MANUTENCAO`; qualquer outro valor/ausente → `EM_ESTOQUE`)
 - `GET /api/notebooks/{asset}/history/` — timeline completa (mais recente primeiro)
-- `GET /api/movements/?asset=`
+- `GET /api/notebooks/summary/` — contagem por status (cards do dashboard)
+- `GET /api/movements/?asset=&limit=` — `limit` corta o resultado (usado no feed do dashboard)
 
 ### Rodando os testes
 
@@ -94,34 +103,38 @@ Os testes usam um banco Mongo separado (`notebooks_inventory_test`,
 configurado em `apps/core/testing.py` via `override_settings`) e limpam
 as collections a cada teste — não tocam nos dados de desenvolvimento.
 
-## Front-end (Fase 3)
+## Front-end (Fases 3 e 4)
 
 ```
 frontend/
-  login.html          tela de login
-  index.html          listagem de notebooks + modais (novo/retirar/devolver/ver)
-  css/                reset.css, layout.css, components.css
+  index.html            redireciona para dashboard.html (logado) ou login.html
+  login.html            tela de login
+  dashboard.html        métricas por status + feed das últimas movimentações
+  notebooks.html        listagem + modais (novo/retirar/devolver) + soft delete
+  notebook-detail.html  ficha técnica + histórico imutável completo de um notebook
+  css/                  reset.css, layout.css, components.css
   js/
-    api.js            único módulo que fala HTTP com o backend (fetch + token)
-    ui.js             helpers de modal e toast, compartilhados entre telas
-    login.js          lógica da tela de login
-    notebooks.js       lógica da listagem: carregar, filtrar, abrir modais, agir
+    api.js              único módulo que fala HTTP com o backend (fetch + token)
+    ui.js               helpers compartilhados: modal, toast, cabeçalho/sessão,
+                         labels de status/tipo de movimento, escape de HTML
+    login.js             lógica da tela de login
+    dashboard.js          lógica do dashboard
+    notebooks.js          lógica da listagem
+    notebook-detail.js    lógica da tela de detalhes
 ```
 
 `js/api.js` é o único arquivo que chama `fetch()` — todas as outras
 telas passam por ele, incluindo a injeção do header
-`Authorization: Token <valor>` (guardado em `localStorage`). Não há
-build step: são módulos ES nativos (`<script type="module">`), por
-isso o front precisa ser servido por HTTP (não aberto como `file://`).
+`Authorization: Token <valor>` (guardado em `localStorage`) e o
+redirecionamento automático para `login.html` caso o token seja
+rejeitado (401) em qualquer chamada autenticada. Não há build step:
+são módulos ES nativos (`<script type="module">`), por isso o front
+precisa ser servido por HTTP (não aberto como `file://`).
 
 Rodando localmente (com o backend já de pé em `:8000`):
 
 ```bash
 cd frontend
 python3 -m http.server 5500
-# abrir http://localhost:5500/login.html
+# abrir http://localhost:5500/
 ```
-
-A tela de detalhes com histórico completo e o dashboard de métricas
-ficam para a Fase 4 — hoje o "Ver" mostra só a ficha básica do
-notebook, sem a timeline de movimentações.

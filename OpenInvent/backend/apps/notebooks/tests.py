@@ -58,6 +58,51 @@ class NotebookCRUDTests(MongoAPITestCase):
         self.assertEqual(get_resp.data["status"], "INATIVO")
 
 
+class NotebookSummaryTests(MongoAPITestCase):
+    def setUp(self):
+        super().setUp()
+        self.operator, self.token = self.register_and_login()
+
+    def _create_notebook(self, asset, **overrides):
+        payload = {
+            "asset": asset,
+            "brand": "Dell",
+            "model": "Latitude 5420",
+            "serial_number": f"SN-{asset}",
+            **overrides,
+        }
+        return self.client.post("/api/notebooks/", payload, format="json")
+
+    def test_summary_counts_by_status(self):
+        self._create_notebook("NOTE0001")
+        self._create_notebook("NOTE0002")
+        self._create_notebook("NOTE0003")
+        self.client.put("/api/notebooks/NOTE0003/", {"status": "MANUTENCAO"}, format="json")
+
+        resp = self.client.get("/api/notebooks/summary/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data["EM_ESTOQUE"], 2)
+        self.assertEqual(resp.data["MANUTENCAO"], 1)
+        self.assertEqual(resp.data["EM_USO"], 0)
+        self.assertEqual(resp.data["INATIVO"], 0)
+        self.assertEqual(resp.data["total"], 3)
+
+    def test_summary_requires_authentication(self):
+        anon = APIClient()
+        resp = anon.get("/api/notebooks/summary/")
+        self.assertEqual(resp.status_code, 401)
+
+    def test_summary_asset_named_summary_does_not_collide(self):
+        """Garante que a rota fixa /summary/ tem prioridade sobre
+        /<asset>/ mesmo se alguém cadastrar um notebook chamado 'summary'."""
+        create_resp = self._create_notebook("summary")
+        self.assertEqual(create_resp.status_code, 201)
+
+        resp = self.client.get("/api/notebooks/summary/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("total", resp.data)
+
+
 class CheckoutReturnHistoryTests(MongoAPITestCase):
     def setUp(self):
         super().setUp()

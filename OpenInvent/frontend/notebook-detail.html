@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalhes do notebook — Inventário de Notebooks</title>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <h1>Inventário de Notebooks</h1>
+      <nav class="app-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="notebooks.html" class="active">Notebooks</a>
+      </nav>
+    </div>
+    <div class="user-info">
+      <span id="current-user">Carregando...</span>
+      <button id="btn-logout" class="btn btn-sm">Sair</button>
+    </div>
+  </header>
+
+  <main class="app-container">
+    <a href="notebooks.html" class="back-link">&larr; Voltar para a listagem</a>
+
+    <div class="detail-card">
+      <h2 id="detail-asset">—</h2>
+      <dl class="detail-grid">
+        <div>
+          <dt>Marca</dt>
+          <dd id="detail-brand">—</dd>
+        </div>
+        <div>
+          <dt>Modelo</dt>
+          <dd id="detail-model">—</dd>
+        </div>
+        <div>
+          <dt>Nº de série</dt>
+          <dd id="detail-serial">—</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd><span id="detail-status" class="badge">—</span></dd>
+        </div>
+        <div>
+          <dt>Responsável atual</dt>
+          <dd id="detail-responsible">—</dd>
+        </div>
+      </dl>
+    </div>
+
+    <h2 class="section-title">Histórico de movimentações</h2>
+    <div class="table-wrapper">
+      <table id="history-table">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Funcionário</th>
+            <th>Registrado por</th>
+            <th>Data</th>
+            <th>Estado</th>
+            <th>Observação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="6">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module" src="js/notebook-detail.js"></script>
+</body>
+</html>

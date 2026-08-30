@@ -13,5 +13,5 @@ class MovementService:
     def __init__(self, repository: MovementRepository | None = None):
         self.repository = repository or MovementRepository()
 
-    def list_movements(self, asset: str | None = None) -> list[dict]:
-        return self.repository.list(asset=asset)
+    def list_movements(self, asset: str | None = None, limit: int | None = None) -> list[dict]:
+        return self.repository.list(asset=asset, limit=limit)

@@ -38,3 +38,7 @@ class NotebookRepository:
     def update_by_asset(self, asset: str, updates: dict) -> dict | None:
         self.collection.update_one({"asset": asset}, {"$set": updates})
         return self.find_by_asset(asset)
+
+    def count_by_status(self) -> dict[str, int]:
+        pipeline = [{"$group": {"_id": "$status", "count": {"$sum": 1}}}]
+        return {row["_id"]: row["count"] for row in self.collection.aggregate(pipeline)}

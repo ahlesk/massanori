@@ -25,10 +25,16 @@ class MovementRepository:
         doc["_id"] = result.inserted_id
         return doc
 
-    def list(self, asset: str | None = None, notebook_id=None) -> list[dict]:
+    def list(
+        self, asset: str | None = None, notebook_id=None, limit: int | None = None
+    ) -> list[dict]:
         query: dict = {}
         if asset:
             query["asset"] = asset
         if notebook_id:
             query["notebook_id"] = notebook_id
-        return list(self.collection.find(query).sort("date", -1))
+
+        cursor = self.collection.find(query).sort("date", -1)
+        if limit:
+            cursor = cursor.limit(limit)
+        return list(cursor)

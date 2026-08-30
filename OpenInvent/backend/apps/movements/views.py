@@ -10,6 +10,11 @@ class MovementListView(APIView):
     service = MovementService()
 
     def get(self, request):
-        movements = self.service.list_movements(asset=request.query_params.get("asset"))
+        limit_param = request.query_params.get("limit")
+        limit = int(limit_param) if limit_param and limit_param.isdigit() else None
+
+        movements = self.service.list_movements(
+            asset=request.query_params.get("asset"), limit=limit
+        )
         data = MovementSerializer([serialize_doc(m) for m in movements], many=True).data
         return Response(data)

@@ -20,12 +20,114 @@
   font-size: 1.25rem;
 }
 
+.app-header .header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+}
+
+.app-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.app-nav a {
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: #52606d;
+}
+
+.app-nav a:hover {
+  background: #f1f5f9;
+}
+
+.app-nav a.active {
+  background: #eff6ff;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
 .app-header .user-info {
   display: flex;
   align-items: center;
   gap: 16px;
   font-size: 0.9rem;
   color: #52606d;
+}
+
+/* ---- dashboard ---- */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.stat-card .stat-label {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: #52606d;
+}
+
+.section-title {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+/* ---- detalhes do notebook ---- */
+
+.detail-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px 24px;
+  margin-top: 12px;
+}
+
+.detail-grid dt {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: #52606d;
+}
+
+.detail-grid dd {
+  margin: 2px 0 0;
+  font-size: 1rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
 }
 
 .app-container {

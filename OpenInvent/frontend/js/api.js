@@ -59,6 +59,14 @@ async function request(path, { method = "GET", body, auth = true } = {}) {
   }
 
   if (!response.ok) {
+    // Token expirado/revogado numa chamada autenticada: manda direto pro
+    // login em vez de deixar cada tela tratar 401 na mão.
+    const onLoginPage = window.location.pathname.endsWith("login.html");
+    if (auth && response.status === 401 && !onLoginPage) {
+      clearToken();
+      window.location.href = "login.html";
+    }
+
     const message = (data && (data.detail || firstFieldError(data))) || `Erro ${response.status}`;
     throw new ApiError(message, response.status, data);
   }
@@ -83,6 +91,7 @@ export const api = {
   listUsers: (params) => request(`/users/${toQueryString(params)}`),
   createUser: (payload) => request("/users/", { method: "POST", body: payload, auth: false }),
 
+  getSummary: () => request("/notebooks/summary/"),
   listNotebooks: (params) => request(`/notebooks/${toQueryString(params)}`),
   createNotebook: (payload) => request("/notebooks/", { method: "POST", body: payload }),
   getNotebook: (asset) => request(`/notebooks/${encodeURIComponent(asset)}/`),

@@ -1,7 +1,7 @@
 import { api, getToken, setToken } from "./api.js";
 
 if (getToken()) {
-  window.location.href = "index.html";
+  window.location.href = "dashboard.html";
 }
 
 const form = document.getElementById("login-form");
@@ -20,7 +20,7 @@ form.addEventListener("submit", async (event) => {
   try {
     const { token } = await api.login(email, password);
     setToken(token);
-    window.location.href = "index.html";
+    window.location.href = "dashboard.html";
   } catch (err) {
     errorBox.textContent = err.message || "Não foi possível entrar.";
   } finally {

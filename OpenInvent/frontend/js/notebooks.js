@@ -1,16 +1,17 @@
 import { api, getToken, clearToken } from "./api.js";
-import { openModal, closeModal, initModals, showToast } from "./ui.js";
+import {
+  STATUS_LABELS,
+  closeModal,
+  escapeHtml,
+  initHeaderSession,
+  initModals,
+  openModal,
+  showToast,
+} from "./ui.js";
 
 if (!getToken()) {
   window.location.href = "login.html";
 }
-
-const STATUS_LABELS = {
-  EM_ESTOQUE: "Em estoque",
-  EM_USO: "Em uso",
-  MANUTENCAO: "Manutenção",
-  INATIVO: "Inativo",
-};
 
 const state = { status: "", search: "" };
 
@@ -18,22 +19,10 @@ const tbody = document.querySelector("#notebooks-table tbody");
 const statusFilter = document.getElementById("filter-status");
 const searchInput = document.getElementById("filter-search");
 const btnNewNotebook = document.getElementById("btn-new-notebook");
-const btnLogout = document.getElementById("btn-logout");
-const currentUserLabel = document.getElementById("current-user");
 
 function formError(form, message) {
   const box = form.querySelector("[data-form-error]");
   if (box) box.textContent = message || "";
-}
-
-async function loadCurrentUser() {
-  try {
-    const me = await api.me();
-    currentUserLabel.textContent = `${me.name} (${me.department})`;
-  } catch (err) {
-    clearToken();
-    window.location.href = "login.html";
-  }
 }
 
 async function loadNotebooks() {
@@ -62,6 +51,7 @@ function rowHtml(nb) {
   const canReturn = nb.status === "EM_USO";
   const canDelete = nb.status !== "EM_USO" && nb.status !== "INATIVO";
   const statusLabel = STATUS_LABELS[nb.status] || nb.status;
+  const detailHref = `notebook-detail.html?asset=${encodeURIComponent(nb.asset)}`;
 
   return `
     <tr>
@@ -71,7 +61,7 @@ function rowHtml(nb) {
       <td><span class="badge badge-${nb.status.toLowerCase()}">${statusLabel}</span></td>
       <td>${escapeHtml(responsible)}</td>
       <td class="actions">
-        <button class="btn btn-sm" data-action="view" data-asset="${escapeHtml(nb.asset)}">Ver</button>
+        <a class="btn btn-sm" href="${detailHref}">Ver</a>
         <button class="btn btn-sm btn-primary" data-action="checkout" data-asset="${escapeHtml(nb.asset)}" ${canCheckout ? "" : "disabled"}>Retirar</button>
         <button class="btn btn-sm btn-secondary" data-action="return" data-asset="${escapeHtml(nb.asset)}" ${canReturn ? "" : "disabled"}>Devolver</button>
         <button class="btn btn-sm btn-danger" data-action="delete" data-asset="${escapeHtml(nb.asset)}" ${canDelete ? "" : "disabled"}>Excluir</button>
@@ -80,18 +70,11 @@ function rowHtml(nb) {
   `;
 }
 
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, (ch) => (
-    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
-  ));
-}
-
 tbody.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-action]");
   if (!button || button.disabled) return;
 
   const { action, asset } = button.dataset;
-  if (action === "view") openViewModal(asset);
   if (action === "checkout") openCheckoutModal(asset);
   if (action === "return") openReturnModal(asset);
   if (action === "delete") handleDelete(asset);
@@ -103,27 +86,6 @@ async function handleDelete(asset) {
     await api.deleteNotebook(asset);
     showToast(`Notebook ${asset} descontinuado.`, "success");
     loadNotebooks();
-  } catch (err) {
-    showToast(err.message, "error");
-  }
-}
-
-// ---- modal: ver notebook ----
-
-const viewModal = document.getElementById("modal-view");
-
-async function openViewModal(asset) {
-  try {
-    const nb = await api.getNotebook(asset);
-    viewModal.querySelector("[data-field=asset]").textContent = nb.asset;
-    viewModal.querySelector("[data-field=brand]").textContent = nb.brand;
-    viewModal.querySelector("[data-field=model]").textContent = nb.model;
-    viewModal.querySelector("[data-field=serial_number]").textContent = nb.serial_number;
-    viewModal.querySelector("[data-field=status]").textContent = STATUS_LABELS[nb.status] || nb.status;
-    viewModal.querySelector("[data-field=responsible]").textContent = nb.current_responsible
-      ? nb.current_responsible.name
-      : "—";
-    openModal(viewModal);
   } catch (err) {
     showToast(err.message, "error");
   }
@@ -255,18 +217,6 @@ searchInput.addEventListener("input", () => {
   }, 300);
 });
 
-// ---- logout ----
-
-btnLogout.addEventListener("click", async () => {
-  try {
-    await api.logout();
-  } catch {
-    // token já pode estar inválido; segue para o login de qualquer forma.
-  }
-  clearToken();
-  window.location.href = "login.html";
-});
-
 initModals();
-loadCurrentUser();
+initHeaderSession(api, clearToken);
 loadNotebooks();

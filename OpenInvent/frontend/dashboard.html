@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Inventário de Notebooks</title>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <h1>Inventário de Notebooks</h1>
+      <nav class="app-nav">
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="notebooks.html">Notebooks</a>
+      </nav>
+    </div>
+    <div class="user-info">
+      <span id="current-user">Carregando...</span>
+      <button id="btn-logout" class="btn btn-sm">Sair</button>
+    </div>
+  </header>
+
+  <main class="app-container">
+    <div class="card-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="card-em-estoque">—</div>
+        <div class="stat-label">Em estoque</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="card-em-uso">—</div>
+        <div class="stat-label">Em uso</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="card-manutencao">—</div>
+        <div class="stat-label">Em manutenção</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="card-inativo">—</div>
+        <div class="stat-label">Inativos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="card-total">—</div>
+        <div class="stat-label">Total de notebooks</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Últimas movimentações</h2>
+    <div class="table-wrapper">
+      <table id="movements-feed">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Asset</th>
+            <th>Funcionário</th>
+            <th>Registrado por</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

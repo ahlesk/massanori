@@ -35,6 +35,15 @@ class NotebookListCreateView(APIView):
         )
 
 
+class NotebookSummaryView(APIView):
+    """GET /api/notebooks/summary/ — contagem por status para os cards do dashboard."""
+
+    service = NotebookService()
+
+    def get(self, request):
+        return Response(self.service.get_status_summary())
+
+
 class NotebookDetailView(APIView):
     service = NotebookService()
 

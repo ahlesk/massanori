@@ -11,6 +11,7 @@ from apps.core.utils import utcnow
 from apps.movements.repositories import MovementRepository
 from apps.notebooks.constants import (
     CONDITION_AVARIA,
+    STATUS_CHOICES,
     STATUS_EM_ESTOQUE,
     STATUS_EM_USO,
     STATUS_MANUTENCAO,
@@ -188,3 +189,11 @@ class NotebookService:
     def get_history(self, asset: str) -> list[dict]:
         self.get_notebook(asset)  # garante 404 se o asset não existir
         return self.movement_repository.list(asset=asset)
+
+    def get_status_summary(self) -> dict[str, int]:
+        """Contagem por status para os cards do dashboard. Sempre traz as
+        quatro chaves (0 quando não há nenhum notebook naquele status)."""
+        counts = self.repository.count_by_status()
+        summary = {status: counts.get(status, 0) for status in STATUS_CHOICES}
+        summary["total"] = sum(summary.values())
+        return summary

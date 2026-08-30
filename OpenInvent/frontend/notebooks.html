@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notebooks — Inventário de Notebooks</title>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <h1>Inventário de Notebooks</h1>
+      <nav class="app-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="notebooks.html" class="active">Notebooks</a>
+      </nav>
+    </div>
+    <div class="user-info">
+      <span id="current-user">Carregando...</span>
+      <button id="btn-logout" class="btn btn-sm">Sair</button>
+    </div>
+  </header>
+
+  <main class="app-container">
+    <div class="toolbar">
+      <select id="filter-status">
+        <option value="">Todos os status</option>
+        <option value="EM_ESTOQUE">Em estoque</option>
+        <option value="EM_USO">Em uso</option>
+        <option value="MANUTENCAO">Manutenção</option>
+        <option value="INATIVO">Inativo</option>
+      </select>
+      <input type="search" id="filter-search" placeholder="Buscar por asset (ex.: NOTE0001)" />
+      <div class="spacer"></div>
+      <button id="btn-new-notebook" class="btn btn-primary">Novo notebook</button>
+    </div>
+
+    <div class="table-wrapper">
+      <table id="notebooks-table">
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Marca / Modelo</th>
+            <th>Nº Série</th>
+            <th>Status</th>
+            <th>Responsável atual</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="6">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal: novo notebook -->
+  <div class="modal-backdrop hidden" id="modal-create-notebook">
+    <div class="modal">
+      <h2>Novo notebook</h2>
+      <form id="form-create-notebook" class="form" novalidate>
+        <label for="create-asset">Asset (patrimônio)</label>
+        <input type="text" id="create-asset" required placeholder="NOTE0001" />
+
+        <label for="create-brand">Marca</label>
+        <input type="text" id="create-brand" required />
+
+        <label for="create-model">Modelo</label>
+        <input type="text" id="create-model" required />
+
+        <label for="create-serial">Número de série</label>
+        <input type="text" id="create-serial" required />
+
+        <p class="form-error" data-form-error role="alert"></p>
+
+        <div class="form-actions">
+          <button type="button" class="btn" data-close-modal>Cancelar</button>
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: retirada (checkout) -->
+  <div class="modal-backdrop hidden" id="modal-checkout">
+    <div class="modal">
+      <h2>Retirar notebook</h2>
+      <form id="form-checkout" class="form" novalidate>
+        <label for="checkout-user">Responsável</label>
+        <select id="checkout-user" required></select>
+
+        <label for="checkout-observation">Observação</label>
+        <textarea id="checkout-observation" placeholder="Opcional"></textarea>
+
+        <p class="form-error" data-form-error role="alert"></p>
+
+        <div class="form-actions">
+          <button type="button" class="btn" data-close-modal>Cancelar</button>
+          <button type="submit" class="btn btn-primary">Confirmar retirada</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: devolução (return) -->
+  <div class="modal-backdrop hidden" id="modal-return">
+    <div class="modal">
+      <h2>Registrar devolução</h2>
+      <form id="form-return" class="form" novalidate>
+        <label for="return-condition">Estado do equipamento</label>
+        <select id="return-condition">
+          <option value="">Não informado</option>
+          <option value="BOM">Bom estado</option>
+          <option value="AVARIA">Avariado (vai para manutenção)</option>
+        </select>
+
+        <label for="return-observation">Observação</label>
+        <textarea id="return-observation" placeholder="Opcional"></textarea>
+
+        <p class="form-error" data-form-error role="alert"></p>
+
+        <div class="form-actions">
+          <button type="button" class="btn" data-close-modal>Cancelar</button>
+          <button type="submit" class="btn btn-secondary">Confirmar devolução</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/notebooks.js"></script>
+</body>
+</html>

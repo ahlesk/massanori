@@ -1,4 +1,57 @@
-/** Helpers de UI compartilhados entre telas: modal e toast de feedback. */
+/** Helpers de UI compartilhados entre telas: modal, toast, cabeçalho e formatação. */
+
+export const STATUS_LABELS = {
+  EM_ESTOQUE: "Em estoque",
+  EM_USO: "Em uso",
+  MANUTENCAO: "Manutenção",
+  INATIVO: "Inativo",
+};
+
+export const MOVEMENT_TYPE_LABELS = {
+  RETIRADA: "Retirada",
+  DEVOLUCAO: "Devolução",
+};
+
+export function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (ch) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
+  ));
+}
+
+export function formatDateTime(isoString) {
+  return new Date(isoString).toLocaleString("pt-BR");
+}
+
+/**
+ * Toda tela autenticada repete o mesmo cabeçalho (nome do usuário logado +
+ * botão de sair). Centralizado aqui para não duplicar essa lógica em
+ * dashboard.js, notebooks.js e notebook-detail.js.
+ */
+export async function initHeaderSession(api, clearToken) {
+  const currentUserLabel = document.getElementById("current-user");
+  if (currentUserLabel) {
+    try {
+      const me = await api.me();
+      currentUserLabel.textContent = `${me.name} (${me.department})`;
+    } catch {
+      clearToken();
+      window.location.href = "login.html";
+    }
+  }
+
+  const btnLogout = document.getElementById("btn-logout");
+  if (btnLogout) {
+    btnLogout.addEventListener("click", async () => {
+      try {
+        await api.logout();
+      } catch {
+        // token já pode estar inválido; segue para o login de qualquer forma.
+      }
+      clearToken();
+      window.location.href = "login.html";
+    });
+  }
+}
 
 export function openModal(modalEl) {
   modalEl.classList.remove("hidden");
