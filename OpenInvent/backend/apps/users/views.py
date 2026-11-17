@@ -1,4 +1,5 @@
 """View: só faz parsing de request/response. Toda regra de negócio vive em UserService."""
+from rest_framework import exceptions
 from rest_framework import status as http_status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -31,6 +32,11 @@ class UserListCreateView(APIView):
     def post(self, request):
         serializer = UserCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        # Cadastro aberto vale só para usuários com login (bootstrap).
+        # Responsáveis (sem e-mail/senha) só podem ser criados por quem já
+        # está logado, para não permitir criação anônima de registros.
+        if not serializer.validated_data.get("password") and not request.user.is_authenticated:
+            raise exceptions.NotAuthenticated()
         user = self.service.create_user(serializer.validated_data)
         return Response(UserSerializer(serialize_doc(user)).data, status=http_status.HTTP_201_CREATED)
 

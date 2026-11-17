@@ -38,7 +38,19 @@ def ensure_indexes() -> None:
     db.notebooks.create_index([("asset", ASCENDING)], unique=True, name="uniq_asset")
     db.notebooks.create_index([("status", ASCENDING)], name="idx_status")
 
-    db.users.create_index([("email", ASCENDING)], unique=True, name="uniq_email")
+    # Parcial: e-mail é único entre quem tem login, mas responsáveis (sem
+    # e-mail) podem existir em qualquer quantidade.
+    email_partial = {"email": {"$type": "string"}}
+    existing = db.users.index_information().get("uniq_email")
+    if existing and existing.get("partialFilterExpression") != email_partial:
+        # Versão antiga do índice (não parcial): recria com o filtro novo.
+        db.users.drop_index("uniq_email")
+    db.users.create_index(
+        [("email", ASCENDING)],
+        unique=True,
+        partialFilterExpression=email_partial,
+        name="uniq_email",
+    )
     # sparse: só usuários logados têm auth_token; permite índice único mesmo
     # com muitos documentos sem o campo.
     db.users.create_index([("auth_token", ASCENDING)], unique=True, sparse=True, name="uniq_auth_token")

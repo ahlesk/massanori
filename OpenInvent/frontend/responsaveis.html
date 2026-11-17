@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsáveis — Inventário de Notebooks</title>
+  <link rel="stylesheet" href="css/reset.css?v=2" />
+  <link rel="stylesheet" href="css/layout.css?v=2" />
+  <link rel="stylesheet" href="css/components.css?v=2" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <h1>Inventário de Notebooks</h1>
+      <nav class="app-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="estoque.html">Estoque</a>
+        <a href="notebooks.html">Notebooks</a>
+        <a href="responsaveis.html" class="active">Responsáveis</a>
+      </nav>
+    </div>
+    <div class="user-info">
+      <span id="current-user">Carregando...</span>
+      <button id="btn-logout" class="btn btn-sm">Sair</button>
+    </div>
+  </header>
+
+  <main class="app-container">
+    <h2 class="section-title">Responsáveis <span id="responsible-count"></span></h2>
+
+    <div class="toolbar">
+      <input type="search" id="filter-search" placeholder="Buscar por nome ou departamento" />
+      <div class="spacer"></div>
+      <button id="btn-new-responsible" class="btn btn-primary">Novo responsável</button>
+    </div>
+
+    <div class="table-wrapper">
+      <table id="responsibles-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Departamento</th>
+            <th>Tipo</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="4">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal: novo responsável -->
+  <div class="modal-backdrop hidden" id="modal-create-responsible">
+    <div class="modal">
+      <h2>Novo responsável</h2>
+      <form id="form-create-responsible" class="form" novalidate>
+        <label for="create-name">Nome</label>
+        <input type="text" id="create-name" required maxlength="150" placeholder="Nome completo" />
+
+        <label for="create-department">Departamento</label>
+        <input type="text" id="create-department" required maxlength="100" placeholder="Ex.: Financeiro" />
+
+        <p class="form-error" data-form-error role="alert"></p>
+
+        <div class="form-actions">
+          <button type="button" class="btn" data-close-modal>Cancelar</button>
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/responsaveis.js"></script>
+</body>
+</html>

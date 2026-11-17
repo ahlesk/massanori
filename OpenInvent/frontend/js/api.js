@@ -90,6 +90,8 @@ export const api = {
 
   listUsers: (params) => request(`/users/${toQueryString(params)}`),
   createUser: (payload) => request("/users/", { method: "POST", body: payload, auth: false }),
+  // Responsável: só nome + departamento (sem login). Exige estar logado.
+  createResponsible: (payload) => request("/users/", { method: "POST", body: payload }),
 
   getSummary: () => request("/notebooks/summary/"),
   listNotebooks: (params) => request(`/notebooks/${toQueryString(params)}`),

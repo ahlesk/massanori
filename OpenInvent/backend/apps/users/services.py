@@ -15,19 +15,23 @@ class UserService:
         self.repository = repository or UserRepository()
 
     def create_user(self, data: dict) -> dict:
-        """Cria o usuário já com senha definida — ele pode logar imediatamente
-        via POST /api/auth/login/, sem nenhum passo de ativação."""
-        email = data["email"]
-        if self.repository.exists_by_email(email):
-            raise ConflictError(f"Já existe um usuário com o e-mail '{email}'.")
-
+        """Com e-mail + senha, o usuário pode logar imediatamente via
+        POST /api/auth/login/, sem passo de ativação. Sem eles, é um
+        responsável: só nome e departamento, sem login, usado apenas para
+        retirar/devolver notebooks."""
         doc = {
             "name": data["name"],
-            "email": email,
             "department": data["department"],
             "active": data.get("active", True),
-            "password_hash": make_password(data["password"]),
         }
+
+        email = data.get("email")
+        if email:
+            if self.repository.exists_by_email(email):
+                raise ConflictError(f"Já existe um usuário com o e-mail '{email}'.")
+            doc["email"] = email
+            doc["password_hash"] = make_password(data["password"])
+
         return self.repository.insert(doc)
 
     def list_users(self, active: bool | None = None) -> list[dict]:
