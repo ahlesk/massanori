@@ -1,11 +1,11 @@
-import { api, getToken, clearToken } from "./api.js";
+import { api, getToken, clearToken } from "./api.js?v=2";
 import {
   MOVEMENT_TYPE_LABELS,
   escapeHtml,
   formatDateTime,
   initHeaderSession,
   showToast,
-} from "./ui.js";
+} from "./ui.js?v=2";
 
 if (!getToken()) {
   window.location.href = "login.html";

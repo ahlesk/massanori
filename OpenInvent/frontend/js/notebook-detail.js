@@ -1,4 +1,4 @@
-import { api, getToken, clearToken } from "./api.js";
+import { api, getToken, clearToken } from "./api.js?v=2";
 import {
   MOVEMENT_TYPE_LABELS,
   STATUS_LABELS,
@@ -6,7 +6,7 @@ import {
   formatDateTime,
   initHeaderSession,
   showToast,
-} from "./ui.js";
+} from "./ui.js?v=2";
 
 if (!getToken()) {
   window.location.href = "login.html";

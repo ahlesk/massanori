@@ -1,4 +1,4 @@
-import { api, getToken, setToken } from "./api.js";
+import { api, getToken, setToken } from "./api.js?v=2";
 
 if (getToken()) {
   window.location.href = "dashboard.html";

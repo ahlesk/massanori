@@ -7,7 +7,7 @@
 </head>
 <body>
   <script type="module">
-    import { getToken } from "./js/api.js";
+    import { getToken } from "./js/api.js?v=2";
     window.location.replace(getToken() ? "dashboard.html" : "login.html");
   </script>
 </body>
