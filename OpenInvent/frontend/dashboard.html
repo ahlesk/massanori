@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard — Inventário de Notebooks</title>
-  <link rel="stylesheet" href="css/reset.css" />
-  <link rel="stylesheet" href="css/layout.css" />
-  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/reset.css?v=2" />
+  <link rel="stylesheet" href="css/layout.css?v=2" />
+  <link rel="stylesheet" href="css/components.css?v=2" />
 </head>
 <body>
   <header class="app-header">
@@ -14,6 +14,7 @@
       <h1>Inventário de Notebooks</h1>
       <nav class="app-nav">
         <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="estoque.html">Estoque</a>
         <a href="notebooks.html">Notebooks</a>
       </nav>
     </div>
@@ -25,26 +26,26 @@
 
   <main class="app-container">
     <div class="card-grid">
-      <div class="stat-card">
+      <a class="stat-card" href="estoque.html">
         <div class="stat-value" id="card-em-estoque">—</div>
         <div class="stat-label">Em estoque</div>
-      </div>
-      <div class="stat-card">
+      </a>
+      <a class="stat-card" href="notebooks.html?status=EM_USO">
         <div class="stat-value" id="card-em-uso">—</div>
         <div class="stat-label">Em uso</div>
-      </div>
-      <div class="stat-card">
+      </a>
+      <a class="stat-card" href="notebooks.html?status=MANUTENCAO">
         <div class="stat-value" id="card-manutencao">—</div>
         <div class="stat-label">Em manutenção</div>
-      </div>
-      <div class="stat-card">
+      </a>
+      <a class="stat-card" href="notebooks.html?status=INATIVO">
         <div class="stat-value" id="card-inativo">—</div>
         <div class="stat-label">Inativos</div>
-      </div>
-      <div class="stat-card">
+      </a>
+      <a class="stat-card" href="notebooks.html">
         <div class="stat-value" id="card-total">—</div>
         <div class="stat-label">Total de notebooks</div>
-      </div>
+      </a>
     </div>
 
     <h2 class="section-title">Últimas movimentações</h2>

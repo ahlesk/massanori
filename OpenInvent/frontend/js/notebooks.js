@@ -13,10 +13,18 @@ if (!getToken()) {
   window.location.href = "login.html";
 }
 
-const state = { status: "", search: "" };
-
 const tbody = document.querySelector("#notebooks-table tbody");
 const statusFilter = document.getElementById("filter-status");
+
+// Permite chegar com o filtro já aplicado a partir dos cards do dashboard
+// (ex.: notebooks.html?status=EM_USO).
+const initialStatus = new URLSearchParams(window.location.search).get("status") || "";
+if ([...statusFilter.options].some((opt) => opt.value === initialStatus)) {
+  statusFilter.value = initialStatus;
+}
+
+const state = { status: statusFilter.value, search: "" };
+
 const searchInput = document.getElementById("filter-search");
 const btnNewNotebook = document.getElementById("btn-new-notebook");
 

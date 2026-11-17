@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estoque — Inventário de Notebooks</title>
+  <link rel="stylesheet" href="css/reset.css?v=2" />
+  <link rel="stylesheet" href="css/layout.css?v=2" />
+  <link rel="stylesheet" href="css/components.css?v=2" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <h1>Inventário de Notebooks</h1>
+      <nav class="app-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="estoque.html" class="active">Estoque</a>
+        <a href="notebooks.html">Notebooks</a>
+      </nav>
+    </div>
+    <div class="user-info">
+      <span id="current-user">Carregando...</span>
+      <button id="btn-logout" class="btn btn-sm">Sair</button>
+    </div>
+  </header>
+
+  <main class="app-container">
+    <h2 class="section-title">Notebooks em estoque <span id="stock-count"></span></h2>
+
+    <div class="toolbar">
+      <input type="search" id="filter-search" placeholder="Buscar por asset (ex.: NOTE0001)" />
+    </div>
+
+    <div class="table-wrapper">
+      <table id="stock-table">
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Marca / Modelo</th>
+            <th>Nº Série</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal: retirada (checkout) -->
+  <div class="modal-backdrop hidden" id="modal-checkout">
+    <div class="modal">
+      <h2>Retirar notebook</h2>
+      <form id="form-checkout" class="form" novalidate>
+        <label for="checkout-user">Responsável</label>
+        <select id="checkout-user" required></select>
+
+        <label for="checkout-observation">Observação</label>
+        <textarea id="checkout-observation" placeholder="Opcional"></textarea>
+
+        <p class="form-error" data-form-error role="alert"></p>
+
+        <div class="form-actions">
+          <button type="button" class="btn" data-close-modal>Cancelar</button>
+          <button type="submit" class="btn btn-primary">Confirmar retirada</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/estoque.js"></script>
+</body>
+</html>
