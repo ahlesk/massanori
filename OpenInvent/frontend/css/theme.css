@@ -1,0 +1,92 @@
+/*
+ * Tokens de tema. Todas as cores do frontend saem daqui — os outros arquivos
+ * CSS só usam var(--...). O tema ativo é definido em <html data-theme="...">
+ * por js/theme.js (escolha salva do usuário ou preferência do sistema).
+ * Sem atributo, vale o tema escuro.
+ */
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #151d2c;
+  --color-bg-glow: rgba(16, 185, 129, 0.06);
+  --color-surface: #1c2537;
+  --color-surface-2: #222c40;
+  --color-surface-hover: #283349;
+  --color-border: #2c374c;
+  --color-border-strong: #3b4861;
+
+  --color-text: #e8edf5;
+  --color-text-muted: #95a1b6;
+  --color-text-subtle: #66728b;
+
+  --color-primary: #10b981;
+  --color-primary-strong: #059669;
+  --color-primary-soft: rgba(16, 185, 129, 0.14);
+  --color-primary-text: #34d399;
+  --color-on-primary: #ffffff;
+
+  --color-blue: #60a5fa;
+  --color-blue-soft: rgba(59, 130, 246, 0.16);
+  --color-amber: #fbbf24;
+  --color-amber-soft: rgba(245, 158, 11, 0.16);
+  --color-purple: #a78bfa;
+  --color-purple-soft: rgba(139, 92, 246, 0.18);
+  --color-gray: #9aa7bb;
+  --color-gray-soft: rgba(148, 163, 184, 0.14);
+  --color-danger: #f87171;
+  --color-danger-soft: rgba(239, 68, 68, 0.16);
+  --color-danger-solid: #ef4444;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-primary: 0 6px 18px rgba(16, 185, 129, 0.28);
+  --backdrop: rgba(4, 9, 18, 0.66);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --color-bg: #f3f5f9;
+  --color-bg-glow: rgba(16, 185, 129, 0.07);
+  --color-surface: #ffffff;
+  --color-surface-2: #f7f9fc;
+  --color-surface-hover: #eef2f7;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+
+  --color-text: #0f172a;
+  --color-text-muted: #5b6578;
+  --color-text-subtle: #8a94a6;
+
+  --color-primary: #10b981;
+  --color-primary-strong: #059669;
+  --color-primary-soft: rgba(16, 185, 129, 0.12);
+  --color-primary-text: #047857;
+  --color-on-primary: #ffffff;
+
+  --color-blue: #1d4ed8;
+  --color-blue-soft: rgba(59, 130, 246, 0.12);
+  --color-amber: #b45309;
+  --color-amber-soft: rgba(245, 158, 11, 0.16);
+  --color-purple: #6d28d9;
+  --color-purple-soft: rgba(139, 92, 246, 0.12);
+  --color-gray: #475569;
+  --color-gray-soft: rgba(100, 116, 139, 0.13);
+  --color-danger: #dc2626;
+  --color-danger-soft: rgba(239, 68, 68, 0.1);
+  --color-danger-solid: #dc2626;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --shadow-primary: 0 6px 18px rgba(16, 185, 129, 0.25);
+  --backdrop: rgba(15, 23, 42, 0.45);
+}
+
+:root {
+  --radius: 10px;
+  --radius-lg: 14px;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+}

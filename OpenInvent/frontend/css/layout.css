@@ -1,83 +1,206 @@
-:root {
-  --color-primary: #2563eb;
-  --color-danger: #dc2626;
-  --color-border: #e2e8f0;
-  --radius: 8px;
-}
+/* Cores e raios vêm de css/theme.css. */
 
-/* ---- app shell (index.html) ---- */
+/* ---- app shell ---- */
 
 .app-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
-  background: #ffffff;
+  gap: 16px;
+  padding: 14px 32px;
+  background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .app-header h1 {
-  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* Marca: quadrado verde com ícone de notebook. */
+.app-header h1::before,
+.login-card h1::before {
+  content: "";
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='5' width='16' height='11' rx='1.5'/><path d='M2 19h20'/></svg>")
+      center / 20px no-repeat,
+    linear-gradient(135deg, var(--color-primary), var(--color-primary-strong));
+  box-shadow: var(--shadow-primary);
 }
 
 .app-header .header-left {
   display: flex;
-  align-items: baseline;
-  gap: 24px;
+  align-items: center;
+  gap: 28px;
+  min-width: 0;
 }
 
 .app-nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
 }
 
 .app-nav a {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: var(--radius);
   font-size: 0.9rem;
+  font-weight: 500;
   text-decoration: none;
-  color: #52606d;
+  color: var(--color-text-muted);
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .app-nav a:hover {
-  background: #f1f5f9;
+  background: var(--color-surface-hover);
+  color: var(--color-text);
 }
 
 .app-nav a.active {
-  background: #eff6ff;
-  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-text);
   font-weight: 600;
+  box-shadow: inset 0 0 0 1px var(--color-primary-soft);
 }
 
 .app-header .user-info {
   display: flex;
   align-items: center;
-  gap: 16px;
-  font-size: 0.9rem;
-  color: #52606d;
+  gap: 12px;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* ---- botão de tema (inserido por js/theme.js) ---- */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-primary-text);
+  border-color: var(--color-border-strong);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Na tela de login não há cabeçalho: botão fica no canto. */
+.theme-toggle.theme-toggle-floating {
+  position: fixed;
+  top: 16px;
+  right: 16px;
 }
 
 /* ---- dashboard ---- */
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .stat-card {
-  background: #ffffff;
+  --accent: var(--color-primary-text);
+  --accent-soft: var(--color-primary-soft);
+  --icon: none;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 118px;
+  padding: 20px 64px 20px 20px;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Quadrado do ícone (fundo) + ícone (máscara) no canto superior direito. */
+.stat-card::before,
+.stat-card::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius);
-  padding: 18px 20px;
+}
+
+.stat-card::before {
+  background: var(--accent-soft);
+}
+
+.stat-card::after {
+  background: var(--accent);
+  -webkit-mask: var(--icon) center / 20px no-repeat;
+  mask: var(--icon) center / 20px no-repeat;
+}
+
+.stat-card:has(#card-em-estoque) {
+  --accent: var(--color-primary-text);
+  --accent-soft: var(--color-primary-soft);
+  --icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 8l-9-5-9 5 9 5 9-5z'/><path d='M3 8v8l9 5 9-5V8'/><path d='M12 13v8'/></svg>");
+}
+
+.stat-card:has(#card-em-uso) {
+  --accent: var(--color-blue);
+  --accent-soft: var(--color-blue-soft);
+  --icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M8 12.5l2.8 2.8L16 9.5'/></svg>");
+}
+
+.stat-card:has(#card-manutencao) {
+  --accent: var(--color-amber);
+  --accent-soft: var(--color-amber-soft);
+  --icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3.5L22 20H2L12 3.5z'/><path d='M12 10v4'/><path d='M12 17h.01'/></svg>");
+}
+
+.stat-card:has(#card-inativo) {
+  --accent: var(--color-gray);
+  --accent-soft: var(--color-gray-soft);
+  --icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='5' rx='1'/><path d='M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9'/><path d='M10 13h4'/></svg>");
+}
+
+.stat-card:has(#card-total) {
+  --accent: var(--color-purple);
+  --accent-soft: var(--color-purple-soft);
+  --icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3l9 5-9 5-9-5 9-5z'/><path d='M3 13l9 5 9-5'/><path d='M3 17l9 5 9-5'/></svg>");
 }
 
 a.stat-card {
-  display: block;
   color: inherit;
   text-decoration: none;
-  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 /* Cards são links: remove o sublinhado padrão em todos os estados e filhos. */
@@ -94,61 +217,86 @@ a.stat-card * {
 
 a.stat-card:hover,
 a.stat-card:focus-visible {
-  border-color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-  transform: translateY(-1px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  outline: none;
 }
 
 .stat-card .stat-value {
+  margin-top: auto; /* alinha os números mesmo se um rótulo quebrar linha */
   font-size: 2rem;
   font-weight: 700;
   line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
+/* Rótulo em cima, valor embaixo (como na referência visual). */
 .stat-card .stat-label {
-  margin-top: 6px;
-  font-size: 0.85rem;
-  color: #52606d;
+  order: -1;
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+a.stat-card .stat-label {
+  color: var(--color-text-muted);
 }
 
 .section-title {
-  font-size: 1rem;
-  margin-bottom: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+
+.section-title span {
+  color: var(--color-text-subtle);
+  font-weight: 500;
 }
 
 /* ---- detalhes do notebook ---- */
 
 .detail-card {
-  background: #ffffff;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: 20px 24px;
-  margin-bottom: 28px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 22px 24px;
+  margin-bottom: 32px;
+}
+
+.detail-card h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
 .detail-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px 24px;
-  margin-top: 12px;
+  gap: 18px 24px;
+  margin: 16px 0 0;
 }
 
 .detail-grid dt {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
+  font-weight: 600;
   text-transform: uppercase;
-  color: #52606d;
+  letter-spacing: 0.04em;
+  color: var(--color-text-subtle);
 }
 
 .detail-grid dd {
-  margin: 2px 0 0;
-  font-size: 1rem;
+  margin: 4px 0 0;
+  font-size: 0.98rem;
+  font-weight: 500;
 }
 
 .back-link {
   display: inline-block;
   margin-bottom: 16px;
   font-size: 0.9rem;
-  color: var(--color-primary);
+  font-weight: 600;
+  color: var(--color-primary-text);
   text-decoration: none;
 }
 
@@ -157,9 +305,9 @@ a.stat-card:focus-visible {
 }
 
 .app-container {
-  max-width: 1100px;
+  max-width: 1140px;
   margin: 0 auto;
-  padding: 24px 32px 64px;
+  padding: 28px 32px 64px;
 }
 
 .toolbar {
@@ -174,36 +322,60 @@ a.stat-card:focus-visible {
   flex: 1;
 }
 
+/* ---- tabelas ---- */
+
 .table-wrapper {
-  background: #ffffff;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
   overflow-x: auto;
 }
 
 table th,
 table td {
   text-align: left;
-  padding: 12px 16px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
 }
 
 table th {
   font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: #52606d;
-  background: #f8fafc;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+}
+
+table td {
+  font-size: 0.92rem;
+}
+
+table tbody tr {
+  transition: background 0.12s ease;
+}
+
+table tbody tr:hover td {
+  background: var(--color-surface-hover);
 }
 
 table tbody tr:last-child td {
   border-bottom: none;
 }
 
-.actions {
-  display: flex;
-  gap: 6px;
+table td a:not(.btn) {
+  color: var(--color-primary-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+table td a:not(.btn):hover {
+  text-decoration: underline;
+}
+
+/* Continua como célula de tabela (display:flex quebraria a borda da linha). */
+td.actions > * + * {
+  margin-left: 6px;
 }
 
 /* ---- login page ---- */
@@ -213,26 +385,43 @@ table tbody tr:last-child td {
   align-items: center;
   justify-content: center;
   min-height: 100%;
+  padding: 16px;
 }
 
 .login-card {
   width: 100%;
-  max-width: 360px;
-  background: #ffffff;
+  max-width: 380px;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   padding: 32px;
 }
 
 .login-card h1 {
-  font-size: 1.3rem;
-  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
 .subtitle {
-  color: #52606d;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 860px) {
+  .app-header {
+    flex-wrap: wrap;
+  }
+
+  .app-header .header-left {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 }
 
 @media (max-width: 640px) {
