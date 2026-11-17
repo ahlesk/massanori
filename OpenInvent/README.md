@@ -135,6 +135,6 @@ Rodando localmente (com o backend já de pé em `:8000`):
 
 ```bash
 cd frontend
-python3 -m http.server 5500
+python3 serve.py   # porta 5500, sem cache
 # abrir http://localhost:5500/
 ```
